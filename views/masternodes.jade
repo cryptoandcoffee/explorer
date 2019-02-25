@@ -20,11 +20,15 @@ block content
             for ( var i=0;i<json.data.length; i++ ) {
               json.data[i]['address'] = "<a href='/address/" + json.data[i]['address'] + "'>" + json.data[i]['address'] + "</a>";
               json.data[i]['lastseen'] = new Date((json.data[i]['lastseen']) * 1000).toLocaleString();
-              if (json.data[i]['lastpaid'])
-                json.data[i]['lastpaid'] = new Date((json.data[i]['lastpaid']) * 1000).toLocaleString();
-              else
-                json.data[i]['lastpaid'] = '<em>not available</em>';
-              json.data[i]['ip'] = "<a href='/address/" + json.data[i]['address'] + "'>" + json.data[i]['ip'] + "</a>";
+              try {
+                if (json.data[i]['lastpaid'] && json.data[i]['lastpaid'] != "0")
+                  json.data[i]['lastpaid'] = new Date((json.data[i]['lastpaid']) * 1000).toLocaleString();
+                else
+                  json.data[i]['lastpaid'] = '<em>not available</em>';
+              }
+              catch(err) {
+                  json.data[i]['lastpaid'] = '<em>not available</em>';
+              }
             }
             return json.data;
           }
