@@ -452,11 +452,11 @@ router.get('/ext/masternodes', function(req, res) {
       {
         var mn = list[key];
         var mnItem = {
-          address: mn.address,
+          address: mn.payee,
           status: mn.status,
           lastseen: mn.lastseen,
           lastpaid: mn.lastpaidtime,
-//          ip: ""
+          ip: mn.address
         };
         mnList.push(mnItem);
 
@@ -491,12 +491,12 @@ router.get('/ext/masternodes', function(req, res) {
         if (settings.masternodes.list_format.lastpaid > -1)
           mnItem.lastpaid = mnData[settings.masternodes.list_format.lastpaid - 1];
 
-/*        // IP
+        // IP
         if (settings.masternodes.list_format.ip === 0)
           mnItem.ip = key.trim().replace(':'+settings.masternodes.default_port, '');
         else if (settings.masternodes.list_format.ip > -1)
           mnItem.ip = mnData[settings.masternodes.list_format.ip - 1].trim().replace(':'+settings.masternodes.default_port, '');
-*/
+
         mnList.push(mnItem);
       }
     }
