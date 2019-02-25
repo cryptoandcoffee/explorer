@@ -11,8 +11,25 @@ block content
           
           ------
 
-          ### #{settings.locale.api_calls}
-          *Return data from coind*
+          ### Statistics API calls **(Experimental)**
+          *Provides various statistic information about Veles network and markets. This part of API is **experimental** at the moment and may change anytime in the future.*
+
+          *  **price**  
+             *Provides information about current VLS price in BTC and USD, market cap, circulating supply, etc. Compatible with metadata format of Coinmarketcap API v1.*  
+             [#{address}/api/stats/price/](/api/stats/price)   
+
+          *  **mining (/algo/*ALGO*)**  
+             *Provides statistics related to Veles mining, such as hashrate of each (or the selected) algo, difficulty, average block reward, daily rewards, etc.*  
+             [#{address}/api/stats/mining/](/api/stats/mining)   
+             [#{address}/api/stats/mining/algo/lyra2z](/api/stats/mining/algo/lyra2z)   
+
+
+
+        :markdown
+          ------
+
+          ### Explorer #{settings.locale.api_calls}
+          *These methods return data from the Veles wallet daemon*
 
           *  **getdifficulty**  
              *#{settings.locale.api_getdifficulty}*  

@@ -1,7 +1,17 @@
 body {
-  padding: 80px 40px;
-  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
- /* background-image: url('/images/background2.png');*/
+       padding: 80px 40px;
+       font-family: 'Jura';
+       font-size: 15px;
+}
+
+h1, h3, h6, .h1, .h3, .h6 {
+       font-family: 'Jura';
+       font-size: 14px;
+}
+
+h2, h4, h5, .h2, .h4, .h5 {
+       font-family: 'Jura', sans-serif;
+       font-size: 15px;
 }
 
 #index-search {
@@ -91,7 +101,7 @@ tr {
 	margin: 0px !important;
 }
 
-#loading-icon {
+loading-icon {
 	width: 30px;
     margin: 10px 10px;
 }
@@ -116,6 +126,10 @@ tr {
 #twitter-icon img{
 	width: 40px;
 	margin: 5px 5px;
+}
+
+.footer-icon{
+	font-size: 18px;
 }
 
 #market_menu {

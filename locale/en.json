@@ -7,6 +7,7 @@
     // menu items
     "menu_explorer": "Explorer",
     "menu_api": "API",
+    "menu_miningstats": "Mining Stats",
     "menu_markets": "Markets",
     "menu_richlist": "Top 100",
     "menu_reward": "Reward",

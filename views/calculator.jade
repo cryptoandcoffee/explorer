@@ -1,0 +1,402 @@
+extends layout
+
+block content   
+  style.
+    .jqplot-table-legend { background: transparent; color: #c8c8c8; font-size: 14px; font-family: 'Jura'; }
+    div.jqplot-table-legend-swatch-outline { border: none; }
+
+  script.
+    format_number = function(number, to_fixed = false) {
+      if (number == 0 || number == null)
+        return '0';
+
+      if (to_fixed)
+        number = Number(number).toFixed(to_fixed);
+      else
+        number = String(number);
+
+      if (String(number).indexOf('.')) {
+        return '<b>' + number.replace('.', '</b>.');
+      } else {
+        return '<b>' + number + '</b>';
+      }
+    };
+    format_hashrate = function(value) {
+      if (value == null || value == 0)
+        return 0;
+
+      if (value > 1000000000)
+        return format_number(value / 1000000000, 2) + ' <b>P</b>H/s';
+
+      if (value > 1000000)
+        return format_number(value / 1000000, 2) + ' <b>T</b>H/s';
+
+      if (value > 1000)
+        return format_number(value / 1000, 2) + ' <b>G</b>H/s';
+
+      return format_number(value, 2) + ' <b>M</b>H/s';
+    };
+    add_percentage = function(value, percents) {
+        if (percents > 0)
+          return value + ' <small>(' + percents + '%)</small>';
+        else
+          return value;
+    };
+  script.
+    $(document).ready(function(){
+      console.log('mining-stats table');
+      statsTable = $('#mining-stats-table').dataTable( {
+        autoWidth: true,
+        searching: false,
+        ordering: false,
+        responsive: true,
+        lengthChange: true,
+        processing: false,
+        bPaginate: false,
+        pageLength: 25,
+        //order: [[ 3, "desc" ]],
+        ajax: {
+          url: 'http://wallet.veles.network:8080/getminigstats/hours/24',
+          dataSrc: function ( json ) {
+            data = []
+            i = 0
+
+            for (var key in json) {
+              data[i] = {
+                'algo': '<big><b>' + key + '</b></big>',
+                'hashrate': format_hashrate(json[key]['hashrate']),
+                'difficulty': format_number(json[key]['difficulty']),
+                'blocks_daily': add_percentage(format_number(json[key]['blocks_daily']), json[key]['blocks_daily_percent']),
+                'rewards_daily': format_number(json[key]['rewards_daily'], 8),
+                'blocks_hourly': add_percentage(format_number(json[key]['blocks_hourly']), json[key]['blocks_hourly_percent']),
+                'rewards_hourly': format_number(json[key]['rewards_hourly'], 8),
+                'block_reward_last': format_number(json[key]['block_reward_last'], 8),
+                'last_block_index': format_number(json[key]['last_block_index'])
+              }
+              i++;
+            }
+            return data;
+          }
+        },
+        columns: [
+          { data: 'algo', className: 'text-left' },
+          { data: 'hashrate'},
+          { data: 'difficulty'},
+          { data: 'block_reward_last'},
+          { data: 'last_block_index'},
+          { data: 'blocks_hourly'},
+          { data: 'rewards_hourly'},
+          { data: 'blocks_daily'},
+          { data: 'rewards_daily'},
+      ]
+      });
+    });
+    $(document).ready(function(){
+      var initPie = function(url) {
+           var daily = [];
+           var hourly = [];
+           var weekly = [];
+           pieChartDaily = null;
+           pieChartHourly = null;
+           pieChartWeekly = null;
+
+           $.ajax({
+            // have to use synchronous here, else the function
+            // will return before the data is fetched
+            //async: false,
+            url: url,
+            dataType:"json",
+            success: function(data) {
+              for (var key in data) { 
+                daily.push([key, Number(data[key]['blocks_daily'])]);
+                hourly.push([key, Number(data[key]['blocks_hourly'])]);
+                weekly.push([key, Number(data[key]['blocks'])]);
+              }
+              pieChartDaily = $.jqplot('pieChartDaily', [daily], {
+                //title: "Algos",
+                //dataRenderer: ajaxDataRenderer,
+                seriesDefaults: {
+                    renderer: $.jqplot.PieRenderer,
+                    rendererOptions: {
+                      diameter: 260,
+                      padding: 0,
+                      sliceMargin: 4, 
+                      // Put data labels on the pie slices.
+                      // By default, labels show the percentage of the slice.
+                      showDataLabels: true,
+                    }
+                  },
+                  grid: {borderWidth:0, shadow:false},
+                  legend: {
+                    background: 'transparent',
+                    show: true,
+                    rendererOptions: {
+                        numberRows: 1,
+                        border: 'none'
+                    },
+                    location: 's'
+                  }
+              });          
+              pieChartHourly = $.jqplot('pieChartHourly', [hourly], {
+                //title: "Algos",
+                //dataRenderer: ajaxDataRenderer,
+                seriesDefaults: {
+                    renderer: $.jqplot.PieRenderer,
+                    rendererOptions: {
+                      diameter: 260,
+                      padding: 0,
+                      sliceMargin: 4, 
+                      // Put data labels on the pie slices.
+                      // By default, labels show the percentage of the slice.
+                      showDataLabels: true,
+                    }
+                  },
+                  grid: {borderWidth:0, shadow:false},
+                  legend: {
+                    background: 'transparent',
+                    show: true,
+                    rendererOptions: {
+                        numberRows: 1,
+                        border: 'none'
+                    },
+                    location: 's'
+                  }
+              });          
+              pieChartWeekly = $.jqplot('pieChartWeekly', [weekly], {
+                //title: "Algos",
+                //dataRenderer: ajaxDataRenderer,
+                seriesDefaults: {
+                    renderer: $.jqplot.PieRenderer,
+                    rendererOptions: {
+                      diameter: 260,
+                      padding: 0,
+                      sliceMargin: 4, 
+                      // Put data labels on the pie slices.
+                      // By default, labels show the percentage of the slice.
+                      showDataLabels: true,
+                    }
+                  },
+                  grid: {borderWidth:0, shadow:false},
+                  legend: {
+                    background: 'transparent',
+                    show: true,
+                    rendererOptions: {
+                        numberRows: 1,
+                        border: 'none'
+                    },
+                    location: 's'
+                  }
+              });          
+            }
+          });
+      };
+
+      lineCharts = {};
+      var initLineChart = function(algo, column, url) {
+           var result = [];
+           var chart_name = 'lineChart-' + algo + '-' + column;
+           lineCharts[chart_name] = null;
+           columnStyles = {
+             'hashrate': {},
+             'difficulty': { color: '#EAA228' }
+           }
+
+           $.ajax({
+            url: url.replace('{algo}', algo).replace('{column}', column),
+            dataType:"json",
+            success: function(data) {
+              var divider = 1;
+              var units = ['H/s', 'kH/s', 'MH/s', 'GH/s', 'TH/s', 'PH/s'];
+              var current_unit = 0;
+
+              if (data.length) {
+                var value = Number(data[0][column]);
+                while (value > 1000) {
+                  value = value / 1000;
+                  divider = divider * 1000;
+                  current_unit++;
+                }
+              }
+
+              for (var key in data) { 
+                result.push(Number(data[key][column]) / divider);
+              }
+
+              if (!result.length)
+                result = [0,0,0,0,0,0,0,0,0,0,0,0];
+
+              if (column == 'hashrate')
+                yaxis_options = {
+                      min: 0,
+                      label: units[current_unit]
+                    };
+              else {
+                divider_pow = Math.pow(divider, 1 / 10).toFixed(0);
+                if (divider_pow == 1)
+                  yaxis_options = { min: 0, label: 'x1'};
+                else
+                  yaxis_options = { min: 0, label: 'x10<sup>' + divider_pow + '</sup>'};
+              }
+
+              lineCharts[algo + column] = $.jqplot(chart_name, [result], {
+                  seriesDefaults: {
+                    showMarker: false
+                  },
+                  series: [columnStyles[column]],
+                  axes: {
+                    xaxis:{
+                      min: 0
+                      //label: units[current_unit]
+                    },
+                    yaxis: yaxis_options
+                  },
+                  legend: {
+                    show: false,
+                    rendererOptions: {
+                        numberRows: 1,
+                        border: 'none'
+                    }
+                  }
+              });          
+            }
+          });
+      };
+      drawPies = function(){
+        console.log('redrawing-pies');
+        var json_stats_url = 'http://wallet.veles.network:8080/getminigstats/hours/168';
+        var json_history_url = 'http://wallet.veles.network:8080/getminigstats/history/{algo}/{column}/24';
+        initPie(json_stats_url);
+        initLineChart('lyra2z', 'hashrate', json_history_url);
+        initLineChart('scrypt', 'hashrate', json_history_url);
+        initLineChart('sha256d', 'hashrate', json_history_url);
+        initLineChart('x11', 'hashrate', json_history_url);
+        initLineChart('x16r', 'hashrate', json_history_url);
+        initLineChart('lyra2z', 'difficulty', json_history_url);
+        initLineChart('scrypt', 'difficulty', json_history_url);
+        initLineChart('sha256d', 'difficulty', json_history_url);
+        initLineChart('x11', 'difficulty', json_history_url);
+        initLineChart('x16r', 'difficulty', json_history_url);
+      };
+
+      drawPies();
+      //window.setInterval(function(){drawPies();}, 60000);
+      window.setInterval(function(){statsTable.ajaxStart();}, 30000);
+    });
+    $(window).resize(function () {
+      pieChartDaily.replot( { resetAxes: false } );
+    });
+
+  .col-md-12
+    .panel.panel-default
+      .panel-heading
+        strong Veles Mining Statistics
+      table#mining-stats-table.table.table-bordered.table-striped
+        thead
+          tr
+            th Algo
+            th.text-center Hashrate
+            th.text-center Difficulty
+            th.text-center Last block reward
+            th.text-center Last block index
+            th.text-center Blocks hourly
+            th.text-center Rewards hourly
+            th.text-center Blocks daily
+            th.text-center Rewards daily
+        tbody.text-center        
+
+  .col-md-4
+    .panel.panel-default
+      .panel-heading
+        strong Blocks Last Hour
+        center
+          div#pieChartHourly(style="width:300px;height:350px;margin:0px;")
+
+  .col-md-4
+    .panel.panel-default
+      .panel-heading
+        strong Blocks Last 24 Hours
+        center
+          div#pieChartDaily(style="width:300px;height:350px;margin:0px;")
+
+  .col-md-4
+    .panel.panel-default
+      .panel-heading
+        strong Blocks Last Week
+        center
+          div#pieChartWeekly(style="width:300px;height:350px;margin:0px;")
+
+  .col-md-6
+    .panel.panel-default
+      .panel-heading
+        strong Lyra2z Hasrate 24h
+        center
+          div#lineChart-lyra2z-hashrate(style="width:100%;height:100px;margin:0px;")
+
+  .col-md-6
+    .panel.panel-default
+      .panel-heading
+        strong Lyra2z Difficulty 24h
+        center
+          div#lineChart-lyra2z-difficulty(style="width:100%;height:100px;margin:0px;")
+
+  .col-md-6
+    .panel.panel-default
+      .panel-heading
+        strong Sha256d Hasrate 24h
+        center
+          div#lineChart-sha256d-hashrate(style="width:100%;height:100px;margin:0px;")
+
+  .col-md-6
+    .panel.panel-default
+      .panel-heading
+        strong Sha256d Difficulty 24h
+        center
+          div#lineChart-sha256d-difficulty(style="width:100%;height:100px;margin:0px;")
+
+  .col-md-6
+    .panel.panel-default
+      .panel-heading
+        strong X11 Hasrate 24h
+        center
+          div#lineChart-x11-hashrate(style="width:100%;height:100px;margin:0px;")
+
+  .col-md-6
+    .panel.panel-default
+      .panel-heading
+        strong X11 Difficulty 24h
+        center
+          div#lineChart-x11-difficulty(style="width:100%;height:100px;margin:0px;")
+
+  .col-md-6
+    .panel.panel-default
+      .panel-heading
+        strong X16r Hasrate 24h
+        center
+          div#lineChart-x16r-hashrate(style="width:100%;height:100px;margin:0px;")
+
+  .col-md-6
+    .panel.panel-default
+      .panel-heading
+        strong X16r Difficulty 24h
+        center
+          div#lineChart-x16r-difficulty(style="width:100%;height:100px;margin:0px;")
+
+  .col-md-6
+    .panel.panel-default
+      .panel-heading
+        strong Scrypt Hasrate 24h
+        center
+          div#lineChart-scrypt-hashrate(style="width:100%;height:100px;margin:0px;")
+
+  .col-md-6
+    .panel.panel-default
+      .panel-heading
+        strong Scrypt Difficulty 24h
+        center
+          div#lineChart-scrypt-difficulty(style="width:100%;height:100px;margin:0px;")
+
+
+
+  .col-md-12(style="margin-bottom: 4%")
+    center
+      

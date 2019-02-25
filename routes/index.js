@@ -208,6 +208,15 @@ router.get('/masternodes', function(req, res) {
   res.render('masternodes', {active: 'masternodes'});
 });
 
+/* Baggins - calculator addition */
+router.get('/calculator', function(req, res) {
+  res.render('calculator', {active: 'calculator'});
+});
+router.get('/miningstats', function(req, res) {
+  res.render('miningstats', {active: 'miningstats'});
+});
+
+
 router.get('/coininfo', function(req, res) {
   if (settings.display.coininfo === false) {
     route_get_index(res, null);
@@ -496,7 +505,7 @@ router.get('/ext/masternodes', function(req, res) {
           mnItem.ip = key.trim().replace(':'+settings.masternodes.default_port, '');
         else if (settings.masternodes.list_format.ip > -1)
           mnItem.ip = mnData[settings.masternodes.list_format.ip - 1].trim().replace(':'+settings.masternodes.default_port, '');
-
+ 
         mnList.push(mnItem);
       }
     }

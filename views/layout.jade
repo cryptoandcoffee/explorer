@@ -9,6 +9,7 @@ html
     link(rel='stylesheet', href='https://fonts.googleapis.com/css?family=Overpass+Mono')
     link(rel='stylesheet', href='/stylesheets/style.css')
     script(src='https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js')
+    script(src='https://cdnjs.cloudflare.com/ajax/libs/jquery/1.11.0/jquery.min.js')
     script(src='//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js')
     script(src='/vendor/jqplot/jquery.jqplot.min.js')
     script(src='/vendor/jqplot/plugins/jqplot.dateAxisRenderer.min.js')
@@ -75,7 +76,7 @@ html
         }, 60000);
         update_stats();
       });
-  body
+  body.bg-img(style="background-image: url('../images/veles_wallpaper.jpg');")
     - function format_unixtime(unixtime) {
       - var a = new Date(unixtime*1000);  
       - var months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
@@ -124,7 +125,7 @@ html
             if settings.display.movement == true
               li#movement 
                 a.navbar-link.loading(href='/movement') 
-                  span.fa.fa-money
+                  span.glyphicon.glyphicon-sort
                   span.menu-text #{settings.locale.menu_movement}
             if settings.display.network == true
               li#network
@@ -144,13 +145,18 @@ html
             if settings.display.masternodes == true
               li#masternodes
                 a.navbar-link.loading(href='/masternodes')
-                  span.fa.fa-server
+                  span.glyphicon.glyphicon-hdd
                   span.menu-text #{settings.locale.menu_masternodes}
             if settings.display.coininfo == true
               li#coininfo
                 a.navbar-link.loading(href='/coininfo')
-                  span.fa.fa-vcard-o
+                  span.glyphicon.glyphicon-education
                   span.menu-text #{settings.locale.menu_coininfo}
+          
+              li#miningstats           
+                a.navbar-link.loading(href='/miningstats')
+                  span.glyphicon.glyphicon-stats
+                  span.menu-text Mining Stats 
             if settings.display.api == true
               li#info
                 a.navbar-link(href='/info')
@@ -276,3 +282,4 @@ html
           else
             span  blocks
         label#lblConnections.label.label-default -
+      
