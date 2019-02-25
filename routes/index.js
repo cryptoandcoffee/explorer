@@ -428,7 +428,7 @@ router.get('/ext/summary', function(req, res) {
                     lastPriceBtc: formatNum(stats.last_price, { minFraction: 8 }),
                     lastPriceUsd: formatCurrency(cmc.price_usd, { maxFraction: 6 }),
                     marketCapUsd: formatCurrency(cmc.market_cap_usd, { maxFraction: 2 }),
-                    marketVolumeUsd: formatCurrency(cmc.["24h_volume_usd"], { maxFraction: 2 }),
+                    marketVolumeUsd: formatCurrency(cmc.volume_24h_usd, { maxFraction: 2 }),
                     connections: connections,
                     blockcount: blockcount,
                     cmc: cmc,

@@ -6,7 +6,7 @@ var CmcSchema = new Schema({
   rank: { type: String },
   price_usd: { type: String },
   price_btc: { type: String },
-  ["24h_volume_usd"]: { type: String },
+  volume_24h_usd: { type: String },
   market_cap_usd: { type: String },
   available_supply: { type: String },
   total_supply: { type: String },
