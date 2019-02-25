@@ -241,7 +241,7 @@ is_locked(function (exists) {
                     continue;
                   }
 
-                  if (settings.baseType === 'pivx') {
+                  if (settings.symbol === 'GLT') {
                     mnPayees.push(mnList[key].addr);
                   } else {
                     var mnPayee = mnList[key].split(/(\s+)/).filter(function (e) {
