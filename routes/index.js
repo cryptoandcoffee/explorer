@@ -452,10 +452,10 @@ router.get('/ext/masternodes', function(req, res) {
       {
         var mn = list[key];
         var mnItem = {
-          address: mn.addr,
+          address: mn.address,
           status: mn.status,
           lastseen: mn.lastseen,
-          lastpaid: mn.lastpaid,
+          lastpaid: mn.lastpaidtime,
 //          ip: ""
         };
         mnList.push(mnItem);
