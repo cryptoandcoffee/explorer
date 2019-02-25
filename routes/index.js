@@ -240,22 +240,22 @@ router.get('/coininfo', function(req, res) {
             var nodeWorthUsd = (cmc.price_usd) ? (settings.coininfo.masternode_required * cmc.price_usd).toFixed(2) : null;
 
             var dailyCoin = formatNum(mnRewardsPerDay, { maxFraction: 4});
-            var dailyBtc = formatNum(mnRewardsPerDay * priceBtc, { minFraction: 8 });
+            var dailyBtc = formatNum(mnRewardsPerDay * priceBtc, { maxFraction: 8 });
             var dailyUsd = formatCurrency(mnRewardsPerDay * cmc.price_usd, { maxFraction: 2 });
             var weeklyCoin = formatNum(mnRewardsPerDay * 7, { maxFraction: 4});
-            var weeklyBtc = formatNum(mnRewardsPerDay * priceBtc* 7, { minFraction: 8 });
+            var weeklyBtc = formatNum(mnRewardsPerDay * priceBtc* 7, { maxFraction: 8 });
             var weeklyUsd = formatCurrency(mnRewardsPerDay * cmc.price_usd * 7, { maxFraction: 2 });
             var monthlyCoin = formatNum(mnRewardsPerDay * (365/12), { maxFraction: 4});
-            var monthlyBtc = formatNum(mnRewardsPerDay * priceBtc * (365/12), { minFraction: 8 });
+            var monthlyBtc = formatNum(mnRewardsPerDay * priceBtc * (365/12), { maxFraction: 8 });
             var monthlyUsd = formatCurrency(mnRewardsPerDay * cmc.price_usd * (365/12), { maxFraction: 2 });
             var yearlyCoin = formatNum(mnRewardsPerDay * 365, { maxFraction: 4});
-            var yearlyBtc = formatNum(mnRewardsPerDay * priceBtc * 365, { minFraction: 8 });
+            var yearlyBtc = formatNum(mnRewardsPerDay * priceBtc * 365, { maxFraction: 8 });
             var yearlyUsd = formatCurrency(mnRewardsPerDay * cmc.price_usd * 365, { maxFraction: 2 });
 
             var data = {
               active: 'coininfo',
               coininfo: settings.coininfo,
-              lastPriceBtc: formatCurrency(stats.last_price, { minFraction: 8 }),
+              lastPriceBtc: formatCurrency(stats.last_price, { maxFraction: 8 }),
               lastPriceUsd: cmc.price_usd ? formatCurrency(cmc.price_usd, { maxFraction: 6 }) : null,
               pricePercChange24h: cmc.percent_change_24h,
               marketCapUsd: formatCurrency(cmc.market_cap_usd, { maxFraction: 2 }),
@@ -266,10 +266,10 @@ router.get('/coininfo', function(req, res) {
               activeMasternodes: activeMnCount,
               mnRoi: mnRoi,
               supply: formatNum(stats.supply, { maxFraction: 4 }),
-              coinsLocked: formatNum(coinsLocked, { minFraction: 8 }),
+              coinsLocked: formatNum(coinsLocked, { maxFraction: 8 }),
               coinsLockedPerc: formatNum(coinsLockedPerc, { maxFraction: 2 }),
               mnRequiredCoins: settings.coininfo.masternode_required,
-              nodeWorthBtc: formatCurrency(nodeWorthBtc, { minFraction: 8 }),
+              nodeWorthBtc: formatCurrency(nodeWorthBtc, { maxFraction: 8 }),
               nodeWorthUsd: nodeWorthUsd ? formatCurrency(nodeWorthUsd, { maxFraction: 2 }) : null,
               dailyCoin: dailyCoin,
               dailyBtc: dailyBtc,
