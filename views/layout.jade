@@ -76,7 +76,7 @@ html
         }, 60000);
         update_stats();
       });
-  body.bg-img(style="background-image: url('../images/veles_wallpaper.jpg');")
+  body.bg(style="color: #000;")
     - function format_unixtime(unixtime) {
       - var a = new Date(unixtime*1000);  
       - var months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
@@ -188,8 +188,8 @@ html
                       label#price_btc
                       =" BTC"
                   .col-sm-4
-                    p(class="text-right") Market cap:
-                    p(class="text-right") 24H Volume:
+                    p(class="text-right" style="color: #FFF;") Market cap:
+                    p(class="text-right" style="color: #FFF;") 24H Volume:
                   .col-sm-4
                     p(class='text-left')
                       ="$"

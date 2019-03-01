@@ -40,6 +40,10 @@ h2, h4, h5, .h2, .h4, .h5 {
 	display: none;
 }
 
+.form-control {
+	background-color: #000;
+}
+
 .data {
 	display: block;
 	overflow: hidden;
@@ -66,6 +70,7 @@ table {
 }
 .dataTables_info, .dataTables_length {
 	padding-left: 10px;
+	color: #FFF;
 }
 
 .dataTables_info {
@@ -185,6 +190,7 @@ loading-icon {
 .panel-summary p {
 	font-size: 13px;
 	margin: 0 0 3px;
+ 	color: #FFF;
 }
 
 .panel-summary h1 {
@@ -212,8 +218,10 @@ loading-icon {
 	min-height: 90px;
 }
 
-.coin-info {
 
+
+.coin-info {
+	color: #FFF;
 }
 
 .coin-info h2 {

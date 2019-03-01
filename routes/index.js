@@ -173,10 +173,10 @@ router.get('/richlist', function(req, res) {
   if (settings.display.richlist == true ) {
     db.get_stats(settings.coin, function (stats) {
       db.get_richlist(settings.coin, function(richlist){
-        //console.log(richlist);
+        console.log(richlist);
         if (richlist) {
           db.get_distribution(richlist, stats, function(distribution) {
-            //console.log(distribution);
+            console.log(distribution);
             res.render('richlist', {
               active: 'richlist',
               balance: richlist.balance,
