@@ -208,6 +208,101 @@ router.get('/masternodes', function(req, res) {
   res.render('masternodes', {active: 'masternodes'});
 });
 
+
+router.get('/serverstats', function(req, res) {
+  if (settings.display.serverstats === false) {
+    route_get_index(res, null);
+    return;
+  }
+
+
+  db.get_stats(settings.coin, function(stats){
+    db.get_cmc(settings.coinmarketcap.ticker, function(cmc) {
+      lib.get_masternodecount(function(totalMnCount) {
+        lib.get_masternodeonlinecount(function(activeMnCount) {
+          db.get_latest_masternodestats(settings.symbol, function(mnStats) {
+            var blocksPerDay = (60*60*24)/settings.coininfo.block_time_sec;
+            var totalMnRewardsDay = settings.coininfo.block_reward_mn * blocksPerDay;
+            var mnRewardsPerDay = totalMnRewardsDay / activeMnCount;
+
+            var priceBtc = (cmc.price_btc) ? cmc.price_btc : stats.last_price;
+            var priceUsd = cmc.price_usd;
+
+            var calculatedBasedOnRealData = false;
+            if (mnStats) {
+              calculatedBasedOnRealData = true;
+              mnRewardsPerDay = mnStats.reward_coins_24h;
+            }
+
+            var mnRewardsPerYear = mnRewardsPerDay * 365;
+            var mnRoi = ((mnRewardsPerYear / settings.coininfo.masternode_required) * 100).toFixed(2);
+            var coinsLocked = totalMnCount * settings.coininfo.masternode_required;
+            var coinsLockedPerc = coinsLocked / (stats.supply/100);
+            var nodeWorthBtc = (settings.coininfo.masternode_required * priceBtc).toFixed(8);
+            var nodeWorthUsd = (cmc.price_usd) ? (settings.coininfo.masternode_required * cmc.price_usd).toFixed(2) : null;
+
+            var dailyCoin = formatNum(mnRewardsPerDay, { maxFraction: 4});
+            var dailyBtc = formatNum(mnRewardsPerDay * priceBtc, { maxFraction: 8 });
+            var dailyUsd = formatCurrency(mnRewardsPerDay * cmc.price_usd, { maxFraction: 2 });
+            var weeklyCoin = formatNum(mnRewardsPerDay * 7, { maxFraction: 4});
+            var weeklyBtc = formatNum(mnRewardsPerDay * priceBtc* 7, { maxFraction: 8 });
+            var weeklyUsd = formatCurrency(mnRewardsPerDay * cmc.price_usd * 7, { maxFraction: 2 });
+            var monthlyCoin = formatNum(mnRewardsPerDay * (365/12), { maxFraction: 4});
+            var monthlyBtc = formatNum(mnRewardsPerDay * priceBtc * (365/12), { maxFraction: 8 });
+            var monthlyUsd = formatCurrency(mnRewardsPerDay * cmc.price_usd * (365/12), { maxFraction: 2 });
+            var yearlyCoin = formatNum(mnRewardsPerDay * 365, { maxFraction: 4});
+            var yearlyBtc = formatNum(mnRewardsPerDay * priceBtc * 365, { maxFraction: 8 });
+            var yearlyUsd = formatCurrency(mnRewardsPerDay * cmc.price_usd * 365, { maxFraction: 2 });
+
+            var data = {
+              active: 'serverstats',
+              coininfo: settings.coininfo,
+              lastPriceBtc: formatCurrency(stats.last_price, { maxFraction: 8 }),
+              lastPriceUsd: cmc.price_usd ? formatCurrency(cmc.price_usd, { maxFraction: 6 }) : null,
+              pricePercChange24h: cmc.percent_change_24h,
+              marketCapUsd: formatCurrency(cmc.market_cap_usd, { maxFraction: 2 }),
+              cmc: cmc,
+              blockCount24h: -1,
+              avgBlockTime: -1,
+              totalMasternodes: totalMnCount,
+              activeMasternodes: activeMnCount,
+              mnRoi: mnRoi,
+              supply: formatNum(stats.supply, { maxFraction: 4 }),
+              coinsLocked: formatNum(coinsLocked, { maxFraction: 8 }),
+              coinsLockedPerc: formatNum(coinsLockedPerc, { maxFraction: 2 }),
+              mnRequiredCoins: settings.coininfo.masternode_required,
+              nodeWorthBtc: formatCurrency(nodeWorthBtc, { maxFraction: 8 }),
+              nodeWorthUsd: nodeWorthUsd ? formatCurrency(nodeWorthUsd, { maxFraction: 2 }) : null,
+              dailyCoin: dailyCoin,
+              dailyBtc: dailyBtc,
+              dailyUsd: dailyUsd,
+              weeklyCoin: weeklyCoin,
+              weeklyBtc: weeklyBtc,
+              weeklyUsd: weeklyUsd,
+              monthlyCoin: monthlyCoin,
+              monthlyBtc: monthlyBtc,
+              monthlyUsd: monthlyUsd,
+              yearlyCoin: yearlyCoin,
+              yearlyBtc: yearlyBtc,
+              yearlyUsd: yearlyUsd,
+              calculatedBasedOnRealData: calculatedBasedOnRealData
+            };
+
+            if (mnStats) {
+              data.blockCount24h = mnStats.block_count_24h;
+              data.avgBlockTime = mnStats.block_avg_time;
+            }
+
+            res.render('serverstats', data);
+          });
+        });
+      });
+    });
+  });
+
+});
+
+
 /* Baggins - calculator addition */
 router.get('/calculator', function(req, res) {
   res.render('calculator', {active: 'calculator'});
@@ -222,6 +317,7 @@ router.get('/coininfo', function(req, res) {
     route_get_index(res, null);
     return;
   }
+
 
   db.get_stats(settings.coin, function(stats){
     db.get_cmc(settings.coinmarketcap.ticker, function(cmc) {

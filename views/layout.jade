@@ -153,9 +153,10 @@ html
                 a.navbar-link.loading(href='/coininfo')
                   span.glyphicon.glyphicon-education
                   span.menu-text #{settings.locale.menu_coininfo}
-          
-              li#network
-                a.navbar-link(href='http://hk1.gltminer.com:61208' target='_new')
+
+            if settings.display.serverstats == true
+              li#serverstats
+                a.navbar-link.loading(href='/serverstats')
                   span.fa.fa-signal 
                   span.menu-text #{settings.locale.menu_serverstats}
 
