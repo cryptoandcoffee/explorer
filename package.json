@@ -15,8 +15,8 @@
     "big-integer": "^1.6.26",
     "bignumber.js": "^4.1.0",
     "bitcoin-node-api": "0.1.0",
-    "body-parser": "~1.0.0",
-    "cookie-parser": "~1.0.1",
+    "body-parser": "^1.18.3",
+    "cookie-parser": "^1.4.4",
     "debug": "~>2.6.9",
     "express": ">=4.5.0",
     "format-currency": "^1.0.0",
@@ -26,9 +26,9 @@
     "markdown-js": "0.0.3",
     "mongodb": "2.0.45",
     "mongoose": "4.1.10",
-    "morgan": "~1.0.0",
+    "morgan": "^1.9.1",
     "qr-image": "~2.0.0",
-    "request": "2.74.0",
+    "request": "^2.88.0",
     "static-favicon": "~1.0.0"
   },
   "devDependencies": {

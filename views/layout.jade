@@ -105,6 +105,7 @@ html
     .nav.navbar.navbar-default.navbar-fixed-top(role='navigation')
       .container-fluid
         .navbar-header
+            img(src='#{settings.logo}', style='margin-top:4px;height:40px;margin-right:10px;')
           button.navbar-toggle(type='button', data-toggle='collapse', data-target='#navbar-collapse')
             span.sr-only Toggle navigation
             span.icon-bar
@@ -153,17 +154,15 @@ html
                   span.glyphicon.glyphicon-education
                   span.menu-text #{settings.locale.menu_coininfo}
           
-              li#miningstats           
-                a.navbar-link.loading(href='/miningstats')
-                  span.glyphicon.glyphicon-stats
-                  span.menu-text Mining Stats 
+//              li#miningstats           
+//                a.navbar-link.loading(href='/miningstats')
+//                  span.glyphicon.glyphicon-stats
+//                  span.menu-text Mining Stats 
             if settings.display.api == true
               li#info
                 a.navbar-link(href='/info')
                   span.glyphicon.glyphicon-info-sign
                   span.menu-text #{settings.locale.menu_api}
-          ul.nav.nav-bar.navbar-right
-            img(src='#{settings.logo}', style='margin-top:4px;height:40px;')
 
     .col-md-12
       .row
